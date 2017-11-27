@@ -1,17 +1,14 @@
-import os
 import re
 import sys
 import json
-from selenium import webdriver
+import requests
+
+url="http://k7msh-lakemountain-wx.local.mesh/"
 
 def main(args):
-    chromedriver = "C:\Users\Jeff\Desktop\chromedriver.exe"
-    os.environ["webdriver.chrome.driver"] = chromedriver
-    driver = webdriver.Chrome(chromedriver)
-    driver.get('http://k7msh-lakemountain-wx.local.mesh/');
-    html = strip_encoded_chars(driver.page_source)
+    html = requests.get(url).text
+    print html
     make_json(html)
-    driver.quit()
 
 def make_json(html):
     try:
@@ -32,31 +29,31 @@ def make_json(html):
 
 def get_wind_speed(html):
     m = re.search('Speed: (\d*\.\d*)', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def get_wind_knots(html):
     m = re.search('Knots: (\d*\.\d*)', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def get_strength(html):
     m = re.search('Strength: (.*)<br />', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def get_direction(html):
-    m = re.search('Direction: (\d*)<br />', html)
-    return str(m.group(1)).strip()
+    m = re.search('Direction: (\d*)', html)
+    return str(m.group(1)).strip() if m else None
 
 def get_compass_direction(html):
     m = re.search('Compas Direction: (\D*)<br />', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def get_temp_inside(html):
     m = re.search('Temp inside building: (\d*\.\d*)', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def get_temp_outside(html):
     m = re.search('temp outside building: (\d*\.\d*)', html)
-    return str(m.group(1)).strip()
+    return str(m.group(1)).strip() if m else None
 
 def strip_encoded_chars(html):
     try:
