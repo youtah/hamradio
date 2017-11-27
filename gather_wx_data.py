@@ -3,11 +3,19 @@ import sys
 import json
 import requests
 
-url="http://k7msh-lakemountain-wx.local.mesh/"
-
 def main(args):
-    html = requests.get(url).text
-    print html
+    url="http://k7msh-lakemountain-wx.local.mesh/"
+    html = ""
+    for i in range(3):
+        try:
+            html = requests.get(url).text
+            break
+        except Exception as err:
+            i+=1
+            if i > 2:
+                print "Failed to connect. Exiting."
+                raise err
+            print "Error connecting, trying again..."
     make_json(html)
 
 def make_json(html):
