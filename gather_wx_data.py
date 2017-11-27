@@ -1,7 +1,6 @@
 import os
 import re
 import sys
-import time
 import json
 from selenium import webdriver
 
